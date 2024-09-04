@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Form;
 
+use Database\Form\Fieldset\Decision as DecisionFieldset;
 use Database\Form\Fieldset\Meeting as MeetingFieldset;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Form\Element\Radio;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Element\Text;
 use Laminas\InputFilter\InputFilterProviderInterface;
@@ -16,6 +19,8 @@ class Other extends AbstractDecision implements InputFilterProviderInterface
     public function __construct(
         private readonly Translator $translator,
         MeetingFieldset $meeting,
+        DecisionFieldset $decision,
+
     ) {
         parent::__construct($meeting);
 
@@ -28,12 +33,22 @@ class Other extends AbstractDecision implements InputFilterProviderInterface
         ]);
 
         $this->add([
+            'name' => 'name',
+            'type' => Text::class,
+            'options' => [
+                'label' => $this->translator->translate('Linked Decision'),
+            ],
+        ]);
+
+        $this->add([
             'name' => 'submit',
             'type' => Submit::class,
             'attributes' => [
                 'value' => $this->translator->translate('Add Decision'),
             ],
         ]);
+
+        $this->add($decision);
     }
 
     public function getInputFilterSpecification(): array

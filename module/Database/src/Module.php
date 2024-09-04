@@ -232,6 +232,7 @@ class Module
                     $form = new OtherForm(
                         $container->get(MvcTranslator::class),
                         $container->get(MeetingFieldset::class),
+                        $container->get(DecisionFieldset::class),
                     );
                     $form->setHydrator($container->get(OtherHydrator::class));
 
