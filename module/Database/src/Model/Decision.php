@@ -6,6 +6,7 @@ namespace Database\Model;
 
 use Application\Model\Enums\MeetingTypes;
 use Database\Model\SubDecision\Annulment;
+use Database\Model\SubDecision\Other;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
@@ -102,6 +103,15 @@ class Decision
         mappedBy: 'target',
     )]
     protected ?Annulment $annulledBy = null;
+
+    /**
+     * Linked to.
+     */
+    #[OneToOne(
+        targetEntity: Other::class,
+        mappedBy: 'target',
+    )]
+    protected ?Other $linkedTo = null;
 
     /**
      * Set the meeting.
@@ -218,6 +228,24 @@ class Decision
     public function isAnnulled(): bool
     {
         return null !== $this->annulledBy;
+    }
+
+    /**
+     * Get the subdecision to which this decision is linked.
+     *
+     * Or null, if it wasn't annulled.
+     */
+    public function getLinkedTo(): ?Other
+    {
+        return $this->linkedTo;
+    }
+
+    /**
+     * Check if this decision is annulled by another decision.
+     */
+    public function isLinked(): bool
+    {
+        return null !== $this->linkedTo;
     }
 
     /**

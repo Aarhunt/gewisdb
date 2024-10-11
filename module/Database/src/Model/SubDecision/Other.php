@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Database\Model\SubDecision;
 
+use Database\Model\Decision;
 use Database\Model\SubDecision;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\OneToOne;
 use RuntimeException;
 
 /**
@@ -15,6 +18,47 @@ use RuntimeException;
 #[Entity]
 class Other extends SubDecision
 {
+    /**
+     * Reference to the link of a decision.
+     */
+    #[OneToOne(
+        targetEntity: Decision::class,
+        inversedBy: 'linkedTo',
+    )]
+    #[JoinColumn(
+        name: 'r_meeting_type',
+        referencedColumnName: 'meeting_type',
+    )]
+    #[JoinColumn(
+        name: 'r_meeting_number',
+        referencedColumnName: 'meeting_number',
+    )]
+    #[JoinColumn(
+        name: 'r_decision_point',
+        referencedColumnName: 'point',
+    )]
+    #[JoinColumn(
+        name: 'r_decision_number',
+        referencedColumnName: 'number',
+    )]
+    protected Decision $target;
+
+    /**
+     * Get the target.
+     */
+    public function getTarget(): Decision
+    {
+        return $this->target;
+    }
+
+    /**
+     * Set the target.
+     */
+    public function setTarget(Decision $target): void
+    {
+        $this->target = $target;
+    }
+
     /**
      * Textual content for the decision.
      */
